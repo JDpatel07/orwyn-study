@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f8f2">
+  <meta name="description" content="ORWYN helps students study with focus, remember more, and feel ready for what comes next.">
+  <title>ORWYN — Make learning click</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #f7f8f2;
+      --white: #fff;
+      --ink: #172a35;
+      --muted: #64737a;
+      --green: #c8f169;
+      --green-dark: #4a702e;
+      --lavender: #e8e6ff;
+      --peach: #ffe4d7;
+      --line: #e4e9e3;
+      --sans: "DM Sans", Arial, sans-serif;
+      --display: "Manrope", "DM Sans", Arial, sans-serif;
+      --gutter: clamp(22px, 6vw, 88px);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    .wrap { width: min(100% - var(--gutter) * 2, 1280px); margin-inline: auto; }
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--green-dark);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { width: 20px; height: 2px; background: currentColor; content: ""; }
+    .display { font-family: var(--display); font-weight: 600; }
+    .button {
+      min-height: 54px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 17px;
+      padding: 0 23px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--ink);
+      color: white;
+      font-size: 13px;
+      font-weight: 700;
+      transition: transform .2s ease, background .2s ease;
+      cursor: pointer;
+    }
+    .button:hover { transform: translateY(-2px); background: #294553; }
+    .button svg { width: 17px; height: 17px; transition: transform .2s ease; }
+    .button:hover svg { transform: translateX(3px); }
+    .text-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .text-link svg { width: 16px; height: 16px; }
+
+    /* Navigation */
+    .site-header { position: absolute; z-index: 5; inset: 0 0 auto; }
+    .nav {
+      min-height: 86px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      border-bottom: 1px solid rgba(23,42,53,.12);
+    }
+    .brand { display: inline-flex; align-items: center; gap: 10px; width: max-content; }
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border-radius: 11px;
+      background: var(--green);
+      color: var(--ink);
+      font-size: 18px;
+      font-weight: 800;
+      transform: rotate(-7deg);
+    }
+    .brand-name { font-family: var(--display); font-size: 20px; font-weight: 800; letter-spacing: -.06em; }
+    .nav-links { display: flex; align-items: center; gap: clamp(22px, 3vw, 44px); }
+    .nav-links a { color: #485a61; font-size: 12px; font-weight: 600; transition: color .2s ease; }
+    .nav-links a:hover { color: var(--green-dark); }
+    .nav-cta { justify-self: end; min-height: 42px; padding: 0 18px; font-size: 12px; }
+    .menu-toggle {
+      display: none;
+      justify-self: end;
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 50%;
+      background: var(--white);
+      color: var(--ink);
+      cursor: pointer;
+    }
+
+    /* Hero */
+    .hero { position: relative; overflow: hidden; padding: 156px 0 96px; }
+    .hero::before {
+      position: absolute;
+      top: 100px;
+      right: -180px;
+      width: 670px;
+      height: 670px;
+      border-radius: 50%;
+      background: #edf2e8;
+      content: "";
+    }
+    .hero-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: clamp(40px, 7vw, 100px);
+    }
+    .hero-copy { max-width: 590px; }
+    .hero-tag {
+      width: max-content;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 13px;
+      border: 1px solid #dfe7d9;
+      border-radius: 999px;
+      background: rgba(255,255,255,.62);
+      color: #50643d;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .hero-tag span { width: 7px; height: 7px; border-radius: 50%; background: #80ae4c; }
+    .hero h1 {
+      margin: 25px 0 19px;
+      font-family: var(--display);
+      font-size: clamp(49px, 6vw, 78px);
+      font-weight: 600;
+      line-height: 1.04;
+      letter-spacing: -.075em;
+    }
+    .hero h1 em { color: #698b46; font-style: normal; }
+    .hero-description { max-width: 470px; margin: 0; color: var(--muted); font-size: 16px; line-height: 1.8; }
+    .hero-actions { display: flex; align-items: center; gap: 24px; margin-top: 30px; }
+    .hero-note { display: flex; align-items: center; gap: 9px; margin-top: 27px; color: #78868a; font-size: 11px; }
+    .hero-note svg { width: 15px; height: 15px; color: var(--green-dark); }
+
+    /* Product preview */
+    .app-wrap { position: relative; max-width: 535px; margin-left: auto; }
+    .app-card {
+      position: relative;
+      padding: 20px;
+      border: 1px solid rgba(25,49,59,.08);
+      border-radius: 25px;
+      background: var(--white);
+      box-shadow: 0 28px 80px rgba(34,58,50,.12), 0 3px 12px rgba(34,58,50,.04);
+      transform: rotate(1.2deg);
+    }
+    .app-top { display: flex; align-items: center; justify-content: space-between; padding-bottom: 17px; border-bottom: 1px solid #edf0ed; }
+    .app-brand { display: flex; align-items: center; gap: 8px; font-family: var(--display); font-size: 13px; font-weight: 800; }
+    .app-brand span { width: 23px; height: 23px; display: grid; place-items: center; border-radius: 8px; background: var(--green); font-size: 13px; }
+    .app-date { color: #849096; font-size: 10px; }
+    .app-greeting { display: flex; justify-content: space-between; align-items: end; margin: 21px 0 16px; }
+    .app-greeting p { margin: 0 0 5px; color: #819097; font-size: 10px; }
+    .app-greeting h2 { margin: 0; font-family: var(--display); font-size: 20px; font-weight: 700; letter-spacing: -.05em; }
+    .streak { display: flex; align-items: center; gap: 5px; padding: 7px 9px; border-radius: 10px; background: #fff3e8; color: #aa642d; font-size: 10px; font-weight: 700; }
+    .streak svg { width: 13px; height: 13px; }
+    .progress-card { padding: 15px; border-radius: 15px; background: #f4f7ed; }
+    .progress-head { display: flex; align-items: start; justify-content: space-between; }
+    .progress-title { color: #67776c; font-size: 10px; font-weight: 600; }
+    .progress-number { font-family: var(--display); font-size: 23px; font-weight: 700; letter-spacing: -.06em; }
+    .progress-number small { color: #75827b; font-family: var(--sans); font-size: 10px; font-weight: 500; letter-spacing: 0; }
+    .progress-track { height: 6px; margin-top: 12px; overflow: hidden; border-radius: 9px; background: #e1e9d8; }
+    .progress-track span { display: block; width: 68%; height: 100%; border-radius: inherit; background: #83aa55; }
+    .progress-caption { margin-top: 8px; color: #87918a; font-size: 9px; }
+    .next-label { margin: 19px 0 9px; color: #7e8b90; font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    .lesson {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 11px 0;
+      border-top: 1px solid #eff1ef;
+    }
+    .lesson-icon { width: 34px; height: 34px; display: grid; flex: 0 0 34px; place-items: center; border-radius: 11px; }
+    .lesson-icon svg { width: 17px; height: 17px; }
+    .lesson-icon.purple { background: var(--lavender); color: #706bb8; }
+    .lesson-icon.orange { background: var(--peach); color: #c0784b; }
+    .lesson-text { flex: 1; }
+    .lesson-text strong { display: block; font-size: 10px; font-weight: 700; }
+    .lesson-text small { display: block; margin-top: 3px; color: #849096; font-size: 9px; }
+    .lesson-time { color: #849096; font-size: 9px; }
+    .floating-note {
+      position: absolute;
+      right: -24px;
+      bottom: 40px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 15px;
+      border: 1px solid rgba(25,49,59,.06);
+      border-radius: 14px;
+      background: white;
+      box-shadow: 0 12px 35px rgba(34,58,50,.12);
+      font-size: 10px;
+      font-weight: 700;
+      transform: rotate(-3deg);
+    }
+    .floating-note span { width: 29px; height: 29px; display: grid; place-items: center; border-radius: 10px; background: var(--green); }
+    .floating-note svg { width: 15px; height: 15px; }
+
+    /* Intro */
+    .intro { padding: clamp(78px, 10vw, 130px) 0; border-top: 1px solid var(--line); }
+    .intro-grid { display: grid; grid-template-columns: .7fr 1.3fr; gap: clamp(50px, 12vw, 175px); }
+    .intro-aside p { max-width: 270px; margin: 19px 0 0; color: var(--muted); font-size: 13px; line-height: 1.85; }
+    .intro-main h2 { max-width: 760px; margin: 0; font-family: var(--display); font-size: clamp(34px, 4.5vw, 59px); font-weight: 600; line-height: 1.17; letter-spacing: -.065em; }
+    .intro-main h2 em { color: #698b46; font-style: normal; }
+    .intro-main p { max-width: 560px; margin: 20px 0 0; color: var(--muted); font-size: 14px; line-height: 1.85; }
+
+    /* Features */
+    .features { padding: clamp(75px, 9vw, 120px) 0; background: #eef2e9; }
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 30px; margin-bottom: 42px; }
+    .section-heading h2 { max-width: 650px; margin: 15px 0 0; font-family: var(--display); font-size: clamp(38px, 5vw, 64px); font-weight: 600; line-height: 1.07; letter-spacing: -.065em; }
+    .section-heading > p { max-width: 300px; margin: 0 0 4px; color: var(--muted); font-size: 13px; line-height: 1.8; }
+    .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+    .feature-card { min-height: 270px; padding: 25px; border: 1px solid rgba(23,42,53,.07); border-radius: 18px; background: rgba(255,255,255,.76); }
+    .feature-card:nth-child(2) { background: var(--lavender); }
+    .feature-card:nth-child(3) { background: var(--peach); }
+    .feature-icon { width: 43px; height: 43px; display: grid; place-items: center; border-radius: 14px; background: var(--green); color: var(--ink); }
+    .feature-card:nth-child(2) .feature-icon { background: white; color: #706bb8; }
+    .feature-card:nth-child(3) .feature-icon { background: white; color: #c0784b; }
+    .feature-icon svg { width: 21px; height: 21px; }
+    .feature-card h3 { margin: 30px 0 10px; font-family: var(--display); font-size: 20px; font-weight: 700; letter-spacing: -.04em; }
+    .feature-card p { max-width: 310px; margin: 0; color: #66757a; font-size: 12px; line-height: 1.8; }
+
+    /* How it works */
+    .how { padding: clamp(85px, 11vw, 145px) 0; }
+    .how-head { max-width: 700px; margin: 0 auto 55px; text-align: center; }
+    .how-head .eyebrow { justify-content: center; }
+    .how-head h2 { margin: 17px 0; font-family: var(--display); font-size: clamp(39px, 5vw, 65px); font-weight: 600; line-height: 1.08; letter-spacing: -.07em; }
+    .how-head p { max-width: 480px; margin: 0 auto; color: var(--muted); font-size: 14px; line-height: 1.8; }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+    .step { position: relative; padding-top: 22px; border-top: 1px solid #dce3db; }
+    .step-number { color: #83917e; font-size: 11px; font-weight: 700; letter-spacing: .08em; }
+    .step h3 { margin: 20px 0 9px; font-family: var(--display); font-size: 20px; font-weight: 700; letter-spacing: -.04em; }
+    .step p { max-width: 300px; margin: 0; color: var(--muted); font-size: 12px; line-height: 1.85; }
+
+    /* Call to action */
+    .cta { padding: 0 0 clamp(80px, 10vw, 130px); }
+    .cta-panel {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      align-items: center;
+      gap: 40px;
+      overflow: hidden;
+      padding: clamp(34px, 6vw, 75px);
+      border-radius: 25px;
+      background: var(--ink);
+      color: white;
+    }
+    .cta-panel::after { position: absolute; right: -120px; bottom: -240px; width: 470px; height: 470px; border-radius: 50%; background: rgba(200,241,105,.13); content: ""; }
+    .cta-copy, .signup { position: relative; z-index: 1; }
+    .cta .eyebrow { color: var(--green); }
+    .cta h2 { max-width: 600px; margin: 18px 0 13px; font-family: var(--display); font-size: clamp(36px, 4.6vw, 59px); font-weight: 600; line-height: 1.07; letter-spacing: -.065em; }
+    .cta-copy > p { max-width: 460px; margin: 0; color: rgba(255,255,255,.72); font-size: 13px; line-height: 1.8; }
+    .signup { padding: 22px; border: 1px solid rgba(255,255,255,.16); border-radius: 17px; background: rgba(255,255,255,.06); }
+    .signup label { display: block; margin-bottom: 11px; color: rgba(255,255,255,.8); font-size: 11px; font-weight: 600; }
+    .signup-row { display: flex; gap: 8px; }
+    .signup input { width: 100%; min-width: 0; height: 49px; padding: 0 14px; border: 1px solid rgba(255,255,255,.17); border-radius: 10px; outline: none; background: rgba(255,255,255,.08); color: white; font-size: 12px; }
+    .signup input::placeholder { color: rgba(255,255,255,.45); }
+    .signup input:focus { border-color: var(--green); }
+    .signup .button { min-height: 49px; flex: 0 0 auto; padding: 0 16px; border-radius: 10px; background: var(--green); color: var(--ink); font-size: 11px; }
+    .signup .button:hover { background: #d7ff8b; }
+    .signup-note { min-height: 16px; margin: 11px 0 0; color: rgba(255,255,255,.58); font-size: 10px; line-height: 1.6; }
+
+    /* Footer */
+    .site-footer { padding: 24px 0; border-top: 1px solid var(--line); }
+    .footer-row { display: flex; align-items: center; justify-content: space-between; gap: 25px; }
+    .footer-brand { display: inline-flex; align-items: center; gap: 8px; font-family: var(--display); font-size: 16px; font-weight: 800; letter-spacing: -.05em; }
+    .footer-brand span { width: 23px; height: 23px; display: grid; place-items: center; border-radius: 8px; background: var(--green); font-size: 13px; }
+    .footer-copy, .footer-top { color: #7c898c; font-size: 10px; }
+    .footer-top { display: inline-flex; align-items: center; gap: 8px; color: var(--ink); font-weight: 700; }
+    .footer-top svg { width: 14px; height: 14px; transform: rotate(-90deg); }
+
+    @media (max-width: 850px) {
+      .hero-grid { grid-template-columns: 1fr 1fr; gap: 30px; }
+      .app-card { padding: 16px; }
+      .floating-note { right: -10px; }
+      .intro-grid { gap: 55px; }
+      .cta-panel { grid-template-columns: 1fr; }
+      .signup { max-width: 520px; }
+    }
+    @media (max-width: 700px) {
+      .nav { min-height: 72px; grid-template-columns: 1fr auto; }
+      .nav-links {
+        position: absolute;
+        top: 72px;
+        right: 0;
+        left: 0;
+        display: none;
+        align-items: stretch;
+        gap: 0;
+        padding: 10px var(--gutter) 18px;
+        border-bottom: 1px solid var(--line);
+        background: var(--paper);
+      }
+      .nav-links.is-open { display: flex; flex-direction: column; }
+      .nav-links a { padding: 15px 0; border-bottom: 1px solid var(--line); }
+      .nav-cta { display: none; }
+      .menu-toggle { display: grid; place-items: center; }
+      .hero { padding: 125px 0 72px; }
+      .hero::before { top: 490px; right: -150px; width: 400px; height: 400px; }
+      .hero-grid { grid-template-columns: 1fr; gap: 42px; }
+      .hero h1 { font-size: clamp(51px, 12vw, 76px); }
+      .hero-description { font-size: 14px; }
+      .app-wrap { width: min(100%, 500px); margin: 0 auto; }
+      .floating-note { right: -5px; bottom: 28px; }
+      .intro-grid { grid-template-columns: 1fr; gap: 34px; }
+      .intro-aside p { max-width: 400px; }
+      .section-heading { align-items: start; flex-direction: column; gap: 18px; margin-bottom: 30px; }
+      .section-heading > p { max-width: 440px; }
+      .feature-grid { grid-template-columns: 1fr; gap: 11px; }
+      .feature-card { min-height: auto; padding: 22px; }
+      .feature-card h3 { margin-top: 22px; }
+      .steps { grid-template-columns: 1fr; gap: 28px; }
+      .step { padding-top: 17px; }
+      .step h3 { margin-top: 14px; }
+      .how-head { margin-bottom: 38px; text-align: left; }
+      .how-head .eyebrow { justify-content: start; }
+      .how-head p { margin-left: 0; }
+      .cta-panel { gap: 30px; padding: 30px 23px; border-radius: 20px; }
+      .signup { padding: 16px; }
+    }
+    @media (max-width: 470px) {
+      .brand-name { font-size: 19px; }
+      .hero-actions { align-items: start; flex-direction: column; gap: 17px; }
+      .app-card { padding: 14px; border-radius: 20px; }
+      .app-greeting h2 { font-size: 18px; }
+      .floating-note { right: -6px; bottom: 20px; padding: 10px; }
+      .signup-row { flex-direction: column; }
+      .signup .button { width: 100%; }
+      .footer-row { align-items: start; flex-wrap: wrap; }
+      .footer-copy { order: 3; width: 100%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav wrap" aria-label="Main navigation">
+      <a class="brand" href="#top" aria-label="ORWYN home">
+        <span class="brand-mark" aria-hidden="true">o</span><span class="brand-name">orwyn</span>
+      </a>
+      <div class="nav-links" id="nav-links">
+        <a href="#why-orwyn">Why ORWYN</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="#early-access">For students</a>
+      </div>
+      <a class="button nav-cta" href="#early-access">Get early access <span aria-hidden="true">↗</span></a>
+      <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+        <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="hero-grid wrap">
+        <div class="hero-copy">
+          <div class="hero-tag"><span aria-hidden="true"></span> A better way to study is taking shape</div>
+          <h1 id="hero-title">Make learning <em>click.</em></h1>
+          <p class="hero-description">Meet the study companion that helps you focus, remember more, and feel ready for what comes next.</p>
+          <div class="hero-actions">
+            <a class="button" href="#early-access">Join the early list
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg>
+            </a>
+            <a class="text-link" href="#how-it-works">See how it works <span aria-hidden="true">↓</span></a>
+          </div>
+          <div class="hero-note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
+            Study at your pace. Build confidence as you go.
+          </div>
+        </div>
+
+        <div class="app-wrap" aria-label="Preview of the ORWYN student dashboard">
+          <div class="app-card">
+            <div class="app-top">
+              <div class="app-brand"><span aria-hidden="true">o</span> orwyn</div>
+              <div class="app-date">YOUR LEARNING SPACE</div>
+            </div>
+            <div class="app-greeting">
+              <div><p>YOUR STUDY PLAN</p><h2>Hey, Alex. Ready?</h2></div>
+              <div class="streak">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 22c4.4 0 7-3 7-7 0-3-1.6-5.3-3.5-7.5-.2 2-1.2 3.2-2.2 3.8C13.2 7.6 11.6 4.6 8.5 2 9 6.7 5 9.2 5 15c0 4 2.8 7 7 7Z"/></svg>
+                4 day streak
+              </div>
+            </div>
+            <div class="progress-card">
+              <div class="progress-head">
+                <div><div class="progress-title">WEEKLY STUDY GOAL</div><div class="progress-number">3.4 <small>of 5 hours</small></div></div>
+                <div class="progress-title">68%</div>
+              </div>
+              <div class="progress-track" aria-label="68 percent of weekly study goal complete"><span></span></div>
+              <div class="progress-caption">A little progress adds up. You're right on track.</div>
+            </div>
+            <div class="next-label">A good place to start</div>
+            <div class="lesson">
+              <div class="lesson-icon purple">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21V5.5ZM4 17a2.5 2.5 0 0 1 2.5-2.5H20"/></svg>
+              </div>
+              <div class="lesson-text"><strong>Biology · Cell structure</strong><small>Quick review · 8 questions</small></div>
+              <div class="lesson-time">10 min</div>
+            </div>
+            <div class="lesson">
+              <div class="lesson-icon orange">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m12 3 2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2L12 3Z"/><path d="m19 15 1.1 2.9L23 19l-2.9 1.1L19 23l-1.1-2.9L15 19l2.9-1.1L19 15Z"/></svg>
+              </div>
+              <div class="lesson-text"><strong>Maths · Functions</strong><small>Practice set · 5 questions</small></div>
+              <div class="lesson-time">12 min</div>
+            </div>
+          </div>
+          <div class="floating-note">
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg></span>
+            Small steps. Real progress.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="intro wrap" id="why-orwyn">
+      <div class="intro-grid">
+        <div class="intro-aside">
+          <div class="eyebrow">Learning, rethought</div>
+          <p>For the curious minds, the late starters, the big dreamers, and everyone figuring it out one study session at a time.</p>
+        </div>
+        <div class="intro-main">
+          <h2 class="display">You don't need to study <em>longer.</em> You need a way to make what you study stick.</h2>
+          <p>ORWYN turns scattered study time into focused, doable sessions—so you can understand your subjects and trust what you know.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="features">
+      <div class="wrap">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">Study smarter, your way</div>
+            <h2 class="display">A little more focus.<br>A lot more “I got this.”</h2>
+          </div>
+          <p>Tools designed to make studying feel clear and manageable, even when your to-do list doesn't.</p>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 5h16M4 12h10M4 19h7"/><path d="m17 15 2 2 4-5"/></svg>
+            </div>
+            <h3>Know what to study next</h3>
+            <p>Turn big goals into small, clear study sessions that fit your day and help you get started.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 3v3m0 12v3M3 12h3m12 0h3"/><circle cx="12" cy="12" r="6"/><path d="M10 12h4m-2-2v4"/></svg>
+            </div>
+            <h3>Remember what you learn</h3>
+            <p>Practice recalling key ideas and revisit them over time, instead of just rereading your notes.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 19V5m0 14h17"/><path d="m7 15 4-4 3 2 6-7"/></svg>
+            </div>
+            <h3>See your progress build</h3>
+            <p>Keep track of the effort you're putting in and the topics that are starting to click.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="how wrap" id="how-it-works">
+      <div class="how-head">
+        <div class="eyebrow">One session at a time</div>
+        <h2 class="display">Less “where do I start?” More “what's next?”</h2>
+        <p>ORWYN helps make your learning feel more like a path and less like a pile of open tabs.</p>
+      </div>
+      <div class="steps">
+        <article class="step">
+          <div class="step-number">01 — SET YOUR DIRECTION</div>
+          <h3>Bring your goals</h3>
+          <p>Choose a subject, tell us what you're working toward, and get a clearer picture of your priorities.</p>
+        </article>
+        <article class="step">
+          <div class="step-number">02 — FIND YOUR RHYTHM</div>
+          <h3>Learn in small loops</h3>
+          <p>Focus on one topic, test what you remember, and give yourself room to take a breather.</p>
+        </article>
+        <article class="step">
+          <div class="step-number">03 — NOTICE THE DIFFERENCE</div>
+          <h3>Build real confidence</h3>
+          <p>See what you've covered, return to tricky bits, and head into your next session knowing where you stand.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="cta" id="early-access">
+      <div class="cta-panel wrap">
+        <div class="cta-copy">
+          <div class="eyebrow">Your next study session can feel different</div>
+          <h2 class="display">Ready when you are.</h2>
+          <p>ORWYN is getting ready to meet its first learners. Leave your email to hear when early access opens.</p>
+        </div>
+        <form class="signup" id="signup-form">
+          <label for="signup-email">Get the early access note</label>
+          <div class="signup-row">
+            <input id="signup-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+            <button class="button" type="submit">Keep me posted <span aria-hidden="true">→</span></button>
+          </div>
+          <p class="signup-note" id="signup-note" role="status" aria-live="polite">No pressure. Just a note when we're ready.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-row wrap">
+      <a class="footer-brand" href="#top" aria-label="ORWYN home"><span aria-hidden="true">o</span> orwyn</a>
+      <span class="footer-copy">Made for learning, made for you. &nbsp; © <span id="year"></span> ORWYN</span>
+      <a class="footer-top" href="#top">Back to top
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg>
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    const menuToggle = document.querySelector(".menu-toggle");
+    const navLinks = document.querySelector(".nav-links");
+
+    menuToggle.addEventListener("click", () => {
+      const isOpen = menuToggle.getAttribute("aria-expanded") === "true";
+      menuToggle.setAttribute("aria-expanded", String(!isOpen));
+      menuToggle.setAttribute("aria-label", isOpen ? "Open menu" : "Close menu");
+      navLinks.classList.toggle("is-open", !isOpen);
+    });
+
+    navLinks.addEventListener("click", (event) => {
+      if (event.target.closest("a")) {
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.setAttribute("aria-label", "Open menu");
+        navLinks.classList.remove("is-open");
+      }
+    });
+
+    document.querySelector("#year").textContent = new Date().getFullYear();
+
+    document.querySelector("#signup-form").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const email = new FormData(event.currentTarget).get("email");
+      const subject = encodeURIComponent("ORWYN early access");
+      const body = encodeURIComponent(`Please let me know when ORWYN early access opens.\n\nEmail: ${email}`);
+      document.querySelector("#signup-note").textContent = "Your email app will open with an early access request ready to send.";
+      window.location.href = `mailto:hello@orwyn.study?subject=${subject}&body=${body}`;
+    });
+  </script>
+</body>
+</html>
